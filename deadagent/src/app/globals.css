@@ -1,0 +1,134 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Josefin+Sans:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --obsidian: #0A0A0B;
+  --gold: #C9A84C;
+  --gold-light: #E2C47A;
+  --ivory: #E4E2E1;
+  
+  --background: var(--obsidian);
+  --foreground: var(--ivory);
+}
+
+body {
+  color: var(--foreground);
+  background-color: var(--background);
+  font-family: 'Josefin Sans', sans-serif;
+  overflow-x: hidden;
+}
+
+/* ── Noise texture overlay ─────────────────────────────── */
+.noise-bg {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.03'/%3E%3C/svg%3E");
+}
+
+/* ── Particle grid ─────────────────────────────────────── */
+.particle-grid {
+  background-image: radial-gradient(rgba(201, 168, 76, 0.18) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+/* ── Floating particles (pure CSS) ─────────────────────── */
+@keyframes float-slow {
+  0%, 100% { transform: translateY(0) translateX(0); opacity: 0.15; }
+  25%      { transform: translateY(-18px) translateX(6px); opacity: 0.35; }
+  50%      { transform: translateY(-6px) translateX(-8px); opacity: 0.25; }
+  75%      { transform: translateY(-24px) translateX(4px); opacity: 0.4; }
+}
+
+.particle {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  border-radius: 0;
+  background: #C9A84C;
+  animation: float-slow var(--dur, 12s) ease-in-out infinite;
+  animation-delay: var(--delay, 0s);
+  opacity: 0.2;
+  will-change: transform, opacity;
+}
+
+/* ── Marquee ───────────────────────────────────────────── */
+@keyframes marquee {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee 30s linear infinite;
+}
+
+.marquee-track:hover {
+  animation-play-state: paused;
+}
+
+/* ── Heartbeat pulse ───────────────────────────────────── */
+@keyframes heartbeat-pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50%      { transform: scale(1.4); opacity: 0.3; }
+}
+
+.heartbeat-pulse {
+  animation: heartbeat-pulse 2s ease-in-out infinite;
+}
+
+/* ── Skeleton Shimmer (gold-tinted) ────────────────────── */
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    #1b1c1c 0%,
+    #2a2518 20%,
+    #1b1c1c 40%,
+    #1b1c1c 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.8s ease-in-out infinite;
+  border-radius: 2px;
+}
+
+.skeleton-text {
+  composes: skeleton;
+  height: 12px;
+  width: 100%;
+}
+
+.skeleton-circle {
+  composes: skeleton;
+  border-radius: 50%;
+}
+
+/* ── Toast notifications ──────────────────────────────── */
+@keyframes toast-slide-in {
+  0%   { transform: translateX(100%); opacity: 0; }
+  100% { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes toast-slide-out {
+  0%   { transform: translateX(0); opacity: 1; }
+  100% { transform: translateX(100%); opacity: 0; }
+}
+
+.toast-enter {
+  animation: toast-slide-in 0.3s ease-out forwards;
+}
+
+.toast-exit {
+  animation: toast-slide-out 0.3s ease-in forwards;
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
