@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>DEADAGENT - Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;400;500;600;700&amp;family=Cormorant+Garamond:wght@300;400;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary-fixed-variant": "#35437e",
+                        "tertiary-fixed": "#dde1ff",
+                        "on-surface-variant": "#d0c5b2",
+                        "on-tertiary": "#1e2b66",
+                        "secondary": "#e1c379",
+                        "inverse-on-surface": "#303030",
+                        "surface-tint": "#e6c364",
+                        "on-primary": "#3d2e00",
+                        "on-error": "#690005",
+                        "on-secondary-fixed": "#241a00",
+                        "on-background": "#e4e2e1",
+                        "surface": "#131313",
+                        "surface-bright": "#393939",
+                        "secondary-fixed": "#ffdf93",
+                        "tertiary": "#b9c4ff",
+                        "primary-container": "#c9a84c",
+                        "on-secondary-fixed-variant": "#584404",
+                        "surface-container-low": "#1b1c1c",
+                        "outline": "#99907e",
+                        "outline-variant": "#4d4637",
+                        "inverse-primary": "#755b00",
+                        "background": "#131313",
+                        "on-tertiary-container": "#2e3b77",
+                        "surface-container-highest": "#353535",
+                        "error-container": "#93000a",
+                        "on-primary-container": "#503d00",
+                        "primary": "#e6c364",
+                        "surface-container": "#1f2020",
+                        "error": "#ffb4ab",
+                        "on-primary-fixed": "#241a00",
+                        "surface-dim": "#131313",
+                        "on-surface": "#e4e2e1",
+                        "on-tertiary-fixed": "#041451",
+                        "secondary-container": "#5b4606",
+                        "surface-container-high": "#2a2a2a",
+                        "primary-fixed": "#ffe08f",
+                        "primary-fixed-dim": "#e6c364",
+                        "surface-container-lowest": "#0e0e0e",
+                        "inverse-surface": "#e4e2e1",
+                        "secondary-fixed-dim": "#e1c379",
+                        "tertiary-container": "#9ba8eb",
+                        "surface-variant": "#353535",
+                        "tertiary-fixed-dim": "#b9c3ff",
+                        "on-secondary": "#3e2e00",
+                        "on-secondary-container": "#d2b56d",
+                        "on-primary-fixed-variant": "#584400",
+                        "on-error-container": "#ffdad6"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.125rem",
+                        "xl": "0.125rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "section-gap": "128px",
+                        "container-max": "1200px",
+                        "gutter": "24px",
+                        "margin-lg": "64px",
+                        "unit": "4px"
+                    },
+                    "fontFamily": {
+                        "title-sm": ["Josefin Sans"],
+                        "label-caps": ["Josefin Sans"],
+                        "body-reg": ["Josefin Sans"],
+                        "headline-md": ["Cormorant Garamond"],
+                        "display-lg": ["Cormorant Garamond"]
+                    },
+                    "fontSize": {
+                        "title-sm": ["14px", { "lineHeight": "1.5", "letterSpacing": "0.15em", "fontWeight": "600" }],
+                        "label-caps": ["12px", { "lineHeight": "1", "letterSpacing": "0.2em", "fontWeight": "500" }],
+                        "body-reg": ["16px", { "lineHeight": "1.6", "letterSpacing": "0.01em", "fontWeight": "300" }],
+                        "headline-md": ["32px", { "lineHeight": "1.2", "fontWeight": "400" }],
+                        "display-lg": ["64px", { "lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "300" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { background-color: #131313; color: #e4e2e1; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24; }
+        .icon-fill { font-variation-settings: 'FILL' 1; }
+    </style>
+</head>
+<body class="font-body-reg text-body-reg min-h-screen flex antialiased selection:bg-primary selection:text-on-primary">
+<!-- SideNavBar -->
+<nav class="bg-neutral-950 h-screen w-64 border-r border-yellow-600/30 flex flex-col h-full py-8 flex-shrink-0 sticky top-0">
+<div class="px-8 mb-16 flex flex-col gap-4">
+<div class="w-12 h-12 bg-surface-container-high rounded border border-yellow-600/30 flex items-center justify-center overflow-hidden">
+<img class="w-full h-full object-cover opacity-80 mix-blend-luminosity" data-alt="A highly detailed, minimalist digital rendering of a brutalist architectural vault door cast in deep obsidian black. The surface is subtly textured like unpolished granite. A single, razor-thin line of warm gold light reflects off the edge, creating a stark, high-contrast, ultra-luxury aesthetic. The mood is secure, ancient, and technologically permanent." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA34faUJqm0MUFY4FAO2YVixia2rESIl2C3F-8FpsR4HzOjt4VDewZLNFSSz9w8eYhYKf_N46t3c8h7uKoClCyMU03eKACgbwQToKqzb9LO_GGS1aYG2DD4jNKlzWwdrTnZzg8-N0KW-gYrwa9Oh7JB7UYo0jn8-PrGBsQewy2Xl5RwV4y_QLZyK-INuwFxnan13SeBJhlqlfEyizFan-34L0T7Yd6Thw3ZnNZck90whBWiVAIWNg_02wTdlD9vpWOcHla9T2bupw-s"/>
+</div>
+<div>
+<h1 class="text-lg font-bold tracking-widest text-yellow-600 font-['Josefin_Sans']">DEADAGENT</h1>
+<p class="font-['Josefin_Sans'] uppercase tracking-[0.2em] text-[10px] text-yellow-600/60 mt-1">The Last Will Protocol</p>
+</div>
+</div>
+<div class="flex-1 px-4 space-y-2">
+<!-- Active Tab -->
+<a class="flex items-center gap-4 px-4 py-3 text-yellow-600 font-bold border-r-2 border-yellow-600 bg-yellow-600/5 hover:bg-neutral-900 transition-all duration-300 scale-100 active:scale-95" href="#">
+<span class="material-symbols-outlined text-[20px]">grid_view</span>
+<span class="font-['Josefin_Sans'] uppercase tracking-[0.2em] text-[10px]">Dashboard</span>
+</a>
+<!-- Inactive Tabs -->
+<a class="flex items-center gap-4 px-4 py-3 text-neutral-500 hover:text-yellow-600/70 transition-colors hover:bg-neutral-900 transition-all duration-300 scale-100 active:scale-95" href="#">
+<span class="material-symbols-outlined text-[20px]">edit_note</span>
+<span class="font-['Josefin_Sans'] uppercase tracking-[0.2em] text-[10px]">Testament Editor</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-neutral-500 hover:text-yellow-600/70 transition-colors hover:bg-neutral-900 transition-all duration-300 scale-100 active:scale-95" href="#">
+<span class="material-symbols-outlined text-[20px]">shield</span>
+<span class="font-['Josefin_Sans'] uppercase tracking-[0.2em] text-[10px]">Agent Protocol</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-neutral-500 hover:text-yellow-600/70 transition-colors hover:bg-neutral-900 transition-all duration-300 scale-100 active:scale-95" href="#">
+<span class="material-symbols-outlined text-[20px]">insights</span>
+<span class="font-['Josefin_Sans'] uppercase tracking-[0.2em] text-[10px]">Activity Ledger</span>
+</a>
+<a class="flex items-center gap-4 px-4 py-3 text-neutral-500 hover:text-yellow-600/70 transition-colors hover:bg-neutral-900 transition-all duration-300 scale-100 active:scale-95" href="#">
+<span class="material-symbols-outlined text-[20px]">settings</span>
+<span class="font-['Josefin_Sans'] uppercase tracking-[0.2em] text-[10px]">Vault Settings</span>
+</a>
+</div>
+<div class="px-8 mt-auto">
+<button class="w-full py-4 border border-[#C9A84C] rounded text-[#C9A84C] font-['Josefin_Sans'] uppercase tracking-[0.2em] text-[10px] hover:bg-[#C9A84C] hover:text-[#131313] transition-colors">
+                Connect Wallet
+            </button>
+</div>
+</nav>
+<!-- Main Content Area -->
+<main class="flex-1 flex flex-col relative overflow-hidden">
+<!-- TopAppBar -->
+<header class="bg-neutral-950/80 backdrop-blur-md w-full sticky top-0 z-50 border-b border-yellow-600/30 flex justify-between items-center px-12 py-6 w-full flat no-shadows">
+<div class="flex items-center">
+<!-- Suppressed search per JSON -->
+</div>
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-3">
+<div class="w-1 h-1 bg-primary rounded-sm shadow-[0_0_4px_rgba(230,195,100,0.8)]"></div>
+<span class="font-['Josefin_Sans'] tracking-widest text-on-surface text-[12px] uppercase">Good evening, vault.eth</span>
+</div>
+<button class="text-neutral-400 hover:text-yellow-500 transition-opacity">
+<span class="material-symbols-outlined">favorite</span>
+</button>
+</div>
+</header>
+<!-- Scrollable Canvas -->
+<div class="flex-1 overflow-y-auto p-12">
+<div class="max-w-[1200px] mx-auto flex flex-col gap-[128px]">
+<!-- Metrics Grid -->
+<section class="grid grid-cols-4 gap-6">
+<!-- Metric Card 1 -->
+<div class="bg-surface-container-low border border-primary/20 rounded p-8 flex flex-col gap-6 relative overflow-hidden group">
+<div class="absolute inset-0 bg-gradient-to-br from-white/[0.02] to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase">Active Agents</span>
+<div class="font-display-lg text-display-lg text-primary">03</div>
+</div>
+<!-- Metric Card 2 -->
+<div class="bg-surface-container-low border border-primary/20 rounded p-8 flex flex-col gap-6 relative overflow-hidden group">
+<div class="absolute inset-0 bg-gradient-to-br from-white/[0.02] to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase">Protected Assets</span>
+<div class="font-display-lg text-display-lg text-primary">$742k</div>
+</div>
+<!-- Metric Card 3 -->
+<div class="bg-surface-container-low border border-primary/20 rounded p-8 flex flex-col gap-6 relative overflow-hidden group">
+<div class="absolute inset-0 bg-gradient-to-br from-white/[0.02] to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase">Heartbeat Status</span>
+<div class="font-headline-md text-[40px] leading-tight text-on-surface flex items-center gap-4 mt-auto">
+<div class="w-2 h-2 bg-primary rounded-sm"></div>
+                            Stable
+                        </div>
+</div>
+<!-- Metric Card 4 -->
+<div class="bg-surface-container-low border border-primary/20 rounded p-8 flex flex-col gap-6 relative overflow-hidden group">
+<div class="absolute inset-0 bg-gradient-to-br from-white/[0.02] to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase">Days Until Review</span>
+<div class="font-display-lg text-display-lg text-on-surface">12</div>
+</div>
+</section>
+<!-- Agent Cards Grid -->
+<section class="flex flex-col gap-12">
+<div class="flex items-center justify-between border-b border-primary/10 pb-4">
+<h2 class="font-headline-md text-headline-md text-primary">Deployed Protocols</h2>
+<button class="font-label-caps text-label-caps text-on-surface-variant hover:text-primary transition-colors flex items-center gap-2">
+<span>View Ledger</span>
+<span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+</button>
+</div>
+<div class="grid grid-cols-3 gap-6">
+<!-- Agent Card 1 -->
+<div class="bg-surface-container-low border border-primary/20 rounded flex flex-col hover:border-primary/50 transition-colors duration-500">
+<div class="p-8 flex flex-col gap-8">
+<div class="flex justify-between items-start">
+<div class="flex flex-col gap-2">
+<span class="font-label-caps text-[10px] text-on-surface-variant tracking-[0.2em]">Target ENS</span>
+<h3 class="font-title-sm text-title-sm text-on-surface lowercase">trader.deadagent.eth</h3>
+</div>
+<div class="w-8 h-8 rounded border border-primary/30 flex items-center justify-center bg-surface-container-high">
+<span class="material-symbols-outlined text-primary text-[16px]">memory</span>
+</div>
+</div>
+<div class="flex flex-col gap-4">
+<div class="flex justify-between items-center border-b border-primary/10 pb-2">
+<span class="font-body-reg text-[12px] text-on-surface-variant">Status</span>
+<div class="flex items-center gap-2">
+<div class="w-1 h-1 bg-primary rounded-sm shadow-[0_0_2px_rgba(230,195,100,0.5)]"></div>
+<span class="font-label-caps text-[10px] text-primary uppercase">Active</span>
+</div>
+</div>
+<div class="flex justify-between items-center border-b border-primary/10 pb-2">
+<span class="font-body-reg text-[12px] text-on-surface-variant">Last Pulse</span>
+<span class="font-label-caps text-[10px] text-on-surface uppercase">2h ago</span>
+</div>
+</div>
+</div>
+<div class="mt-auto px-8 pb-8 flex flex-col gap-2">
+<div class="flex justify-between items-center">
+<span class="font-label-caps text-[9px] text-on-surface-variant">Memory allocation</span>
+<span class="font-label-caps text-[9px] text-primary">74%</span>
+</div>
+<div class="h-[2px] w-full bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-primary w-[74%] rounded-full"></div>
+</div>
+</div>
+</div>
+<!-- Agent Card 2 -->
+<div class="bg-surface-container-low border border-primary/20 rounded flex flex-col hover:border-primary/50 transition-colors duration-500">
+<div class="p-8 flex flex-col gap-8">
+<div class="flex justify-between items-start">
+<div class="flex flex-col gap-2">
+<span class="font-label-caps text-[10px] text-on-surface-variant tracking-[0.2em]">Target ENS</span>
+<h3 class="font-title-sm text-title-sm text-on-surface lowercase">vault.heritage.eth</h3>
+</div>
+<div class="w-8 h-8 rounded border border-primary/30 flex items-center justify-center bg-surface-container-high">
+<span class="material-symbols-outlined text-primary text-[16px]">account_balance</span>
+</div>
+</div>
+<div class="flex flex-col gap-4">
+<div class="flex justify-between items-center border-b border-primary/10 pb-2">
+<span class="font-body-reg text-[12px] text-on-surface-variant">Status</span>
+<div class="flex items-center gap-2">
+<div class="w-1 h-1 bg-primary rounded-sm shadow-[0_0_2px_rgba(230,195,100,0.5)]"></div>
+<span class="font-label-caps text-[10px] text-primary uppercase">Active</span>
+</div>
+</div>
+<div class="flex justify-between items-center border-b border-primary/10 pb-2">
+<span class="font-body-reg text-[12px] text-on-surface-variant">Last Pulse</span>
+<span class="font-label-caps text-[10px] text-on-surface uppercase">5m ago</span>
+</div>
+</div>
+</div>
+<div class="mt-auto px-8 pb-8 flex flex-col gap-2">
+<div class="flex justify-between items-center">
+<span class="font-label-caps text-[9px] text-on-surface-variant">Memory allocation</span>
+<span class="font-label-caps text-[9px] text-primary">32%</span>
+</div>
+<div class="h-[2px] w-full bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-primary w-[32%] rounded-full"></div>
+</div>
+</div>
+</div>
+<!-- Agent Card 3 -->
+<div class="bg-surface-container-low border border-primary/20 rounded flex flex-col opacity-60 hover:opacity-100 transition-opacity duration-500">
+<div class="p-8 flex flex-col gap-8">
+<div class="flex justify-between items-start">
+<div class="flex flex-col gap-2">
+<span class="font-label-caps text-[10px] text-on-surface-variant tracking-[0.2em]">Target ENS</span>
+<h3 class="font-title-sm text-title-sm text-on-surface lowercase">cold.storage.eth</h3>
+</div>
+<div class="w-8 h-8 rounded border border-outline/30 flex items-center justify-center bg-surface-container-high">
+<span class="material-symbols-outlined text-outline text-[16px]">ac_unit</span>
+</div>
+</div>
+<div class="flex flex-col gap-4">
+<div class="flex justify-between items-center border-b border-primary/10 pb-2">
+<span class="font-body-reg text-[12px] text-on-surface-variant">Status</span>
+<div class="flex items-center gap-2">
+<div class="w-1 h-1 bg-outline rounded-sm"></div>
+<span class="font-label-caps text-[10px] text-outline uppercase">Dormant</span>
+</div>
+</div>
+<div class="flex justify-between items-center border-b border-primary/10 pb-2">
+<span class="font-body-reg text-[12px] text-on-surface-variant">Last Pulse</span>
+<span class="font-label-caps text-[10px] text-on-surface uppercase">14d ago</span>
+</div>
+</div>
+</div>
+<div class="mt-auto px-8 pb-8 flex flex-col gap-2">
+<div class="flex justify-between items-center">
+<span class="font-label-caps text-[9px] text-on-surface-variant">Memory allocation</span>
+<span class="font-label-caps text-[9px] text-outline">12%</span>
+</div>
+<div class="h-[2px] w-full bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-outline w-[12%] rounded-full"></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</div>
+</div>
+</main>
+</body></html>

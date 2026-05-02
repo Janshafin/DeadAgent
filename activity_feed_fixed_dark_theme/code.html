@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Activity Ledger - DEADAGENT</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;500;600&amp;family=Cormorant+Garamond:wght@300;400&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary-fixed-variant": "#35437e",
+                        "tertiary-fixed": "#dde1ff",
+                        "on-surface-variant": "#d0c5b2",
+                        "on-tertiary": "#1e2b66",
+                        "secondary": "#e1c379",
+                        "inverse-on-surface": "#303030",
+                        "surface-tint": "#e6c364",
+                        "on-primary": "#3d2e00",
+                        "on-error": "#690005",
+                        "on-secondary-fixed": "#241a00",
+                        "on-background": "#e4e2e1",
+                        "surface": "#131313",
+                        "surface-bright": "#393939",
+                        "secondary-fixed": "#ffdf93",
+                        "tertiary": "#b9c4ff",
+                        "primary-container": "#c9a84c",
+                        "on-secondary-fixed-variant": "#584404",
+                        "surface-container-low": "#1b1c1c",
+                        "outline": "#99907e",
+                        "outline-variant": "#4d4637",
+                        "inverse-primary": "#755b00",
+                        "background": "#131313",
+                        "on-tertiary-container": "#2e3b77",
+                        "surface-container-highest": "#353535",
+                        "error-container": "#93000a",
+                        "on-primary-container": "#503d00",
+                        "primary": "#e6c364",
+                        "surface-container": "#1f2020",
+                        "error": "#ffb4ab",
+                        "on-primary-fixed": "#241a00",
+                        "surface-dim": "#131313",
+                        "on-surface": "#e4e2e1",
+                        "on-tertiary-fixed": "#041451",
+                        "secondary-container": "#5b4606",
+                        "surface-container-high": "#2a2a2a",
+                        "primary-fixed": "#ffe08f",
+                        "primary-fixed-dim": "#e6c364",
+                        "surface-container-lowest": "#0e0e0e",
+                        "inverse-surface": "#e4e2e1",
+                        "secondary-fixed-dim": "#e1c379",
+                        "tertiary-container": "#9ba8eb",
+                        "surface-variant": "#353535",
+                        "tertiary-fixed-dim": "#b9c3ff",
+                        "on-secondary": "#3e2e00",
+                        "on-secondary-container": "#d2b56d",
+                        "on-primary-fixed-variant": "#584400",
+                        "on-error-container": "#ffdad6"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "section-gap": "128px",
+                        "container-max": "1200px",
+                        "gutter": "24px",
+                        "margin-lg": "64px",
+                        "unit": "4px"
+                    },
+                    "fontFamily": {
+                        "title-sm": ["Josefin Sans"],
+                        "label-caps": ["Josefin Sans"],
+                        "body-reg": ["Josefin Sans"],
+                        "headline-md": ["Cormorant Garamond"],
+                        "display-lg": ["Cormorant Garamond"]
+                    },
+                    "fontSize": {
+                        "title-sm": ["14px", { "lineHeight": "1.5", "letterSpacing": "0.15em", "fontWeight": "600" }],
+                        "label-caps": ["12px", { "lineHeight": "1", "letterSpacing": "0.2em", "fontWeight": "500" }],
+                        "body-reg": ["16px", { "lineHeight": "1.6", "letterSpacing": "0.01em", "fontWeight": "300" }],
+                        "headline-md": ["32px", { "lineHeight": "1.2", "fontWeight": "400" }],
+                        "display-lg": ["64px", { "lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "300" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            background-color: theme('colors.background');
+            color: theme('colors.on-background');
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+        
+        .timeline-line {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 24px;
+            width: 1px;
+            background-color: theme('colors.primary');
+            opacity: 0.2;
+            z-index: 0;
+        }
+        
+        .timeline-node {
+            position: relative;
+            z-index: 10;
+        }
+        
+        .mesh-bg {
+            background-image: 
+                radial-gradient(circle at 50% 50%, theme('colors.surface-container') 0%, transparent 70%),
+                linear-gradient(0deg, theme('colors.background') 0%, transparent 100%);
+        }
+        
+        .grid-bg {
+            background-image: linear-gradient(theme('colors.primary') 1px, transparent 1px),
+            linear-gradient(90deg, theme('colors.primary') 1px, transparent 1px);
+            background-size: 40px 40px;
+            background-position: center center;
+            opacity: 0.05;
+        }
+    </style>
+</head>
+<body class="flex flex-col md:flex-row min-h-screen" style="background-color: #0D0D0D;">
+<!-- SideNavBar (WEB) -->
+<aside class="hidden md:flex flex-col h-screen w-64 border-r border-yellow-600/30 bg-neutral-950 py-8 shrink-0 fixed left-0 top-0 z-40">
+<div class="px-8 mb-12">
+<h1 class="text-lg font-bold tracking-widest text-yellow-600 font-['Josefin_Sans'] uppercase">DEADAGENT</h1>
+<p class="font-['Josefin_Sans'] uppercase tracking-[0.2em] text-[10px] text-neutral-500 mt-2">The Last Will Protocol</p>
+</div>
+<nav class="flex flex-col flex-grow">
+<!-- Inactive -->
+<a class="flex items-center px-8 py-4 text-neutral-500 hover:text-yellow-600/70 transition-colors hover:bg-neutral-900 transition-all duration-300 scale-100 active:scale-95 group" href="#">
+<span class="material-symbols-outlined mr-4 opacity-70 group-hover:opacity-100">grid_view</span>
+<span class="font-['Josefin_Sans'] uppercase tracking-[0.2em] text-[10px]">Dashboard</span>
+</a>
+<!-- Inactive -->
+<a class="flex items-center px-8 py-4 text-neutral-500 hover:text-yellow-600/70 transition-colors hover:bg-neutral-900 transition-all duration-300 scale-100 active:scale-95 group" href="#">
+<span class="material-symbols-outlined mr-4 opacity-70 group-hover:opacity-100">edit_note</span>
+<span class="font-['Josefin_Sans'] uppercase tracking-[0.2em] text-[10px]">Testament Editor</span>
+</a>
+<!-- Inactive -->
+<a class="flex items-center px-8 py-4 text-neutral-500 hover:text-yellow-600/70 transition-colors hover:bg-neutral-900 transition-all duration-300 scale-100 active:scale-95 group" href="#">
+<span class="material-symbols-outlined mr-4 opacity-70 group-hover:opacity-100">shield</span>
+<span class="font-['Josefin_Sans'] uppercase tracking-[0.2em] text-[10px]">Agent Protocol</span>
+</a>
+<!-- ACTIVE -->
+<a class="flex items-center px-8 py-4 text-yellow-600 font-bold border-r-2 border-yellow-600 bg-yellow-600/5 hover:bg-neutral-900 transition-all duration-300 scale-100 active:scale-95" href="#">
+<span class="material-symbols-outlined mr-4">insights</span>
+<span class="font-['Josefin_Sans'] uppercase tracking-[0.2em] text-[10px]">Activity Ledger</span>
+</a>
+<!-- Inactive -->
+<a class="flex items-center px-8 py-4 text-neutral-500 hover:text-yellow-600/70 transition-colors hover:bg-neutral-900 transition-all duration-300 scale-100 active:scale-95 group" href="#">
+<span class="material-symbols-outlined mr-4 opacity-70 group-hover:opacity-100">settings</span>
+<span class="font-['Josefin_Sans'] uppercase tracking-[0.2em] text-[10px]">Vault Settings</span>
+</a>
+</nav>
+<div class="px-8 mt-auto">
+<button class="w-full py-3 border border-yellow-600/30 text-yellow-600 font-['Josefin_Sans'] uppercase tracking-[0.2em] text-[10px] hover:bg-yellow-600 hover:text-neutral-950 transition-colors duration-300">
+                Connect Wallet
+            </button>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 flex flex-col md:ml-64 relative min-h-screen bg-[#0D0D0D]">
+<!-- TopAppBar (WEB/MOBILE) -->
+<header class="w-full sticky top-0 z-50 border-b border-yellow-600/30 bg-neutral-950/80 backdrop-blur-md flex justify-between items-center px-6 md:px-12 py-6">
+<div class="md:hidden">
+<h1 class="text-xl font-black text-yellow-600 font-['Josefin_Sans'] tracking-widest">DEADAGENT</h1>
+</div>
+<div class="hidden md:block">
+<!-- Empty space to balance header on desktop -->
+</div>
+<div class="flex items-center gap-6">
+<button class="text-neutral-400 hover:text-yellow-500 transition-opacity">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">favorite</span>
+</button>
+<div class="flex items-center gap-3 pl-6 border-l border-yellow-600/30">
+<span class="font-['Josefin_Sans'] tracking-widest text-yellow-600 text-[12px]">0x71...C4A2</span>
+<div class="w-8 h-8 rounded-full border border-yellow-600/30 bg-surface-container overflow-hidden flex items-center justify-center">
+<img alt="Guardian Avatar" class="w-full h-full object-cover grayscale opacity-80" data-alt="A macro photograph of an abstract, dark obsidian surface with subtle gold flecks, representing a minimal and secure digital identity token in a high-end banking application. The lighting is low and moody." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBAZArAbSPGVUL06CupCby8FKvhpNR3b3h_KRXrP9Xk0M9NR2wNMnq9aFKLfT9K03ys5qB5wVFSf6NuLssp3rUYWXtglpxrmXD818Azwl0Qg_DSYqWe7iqSJSjIT1dflm7ao6YdvTSkSpwhBaqNErApRYb1Yc1DsoOiWM6vZC7vWMSfKXBp2vE2UvZht0rkEAh5lh18OLIzY5XjyORw3U6dF44tDQtGHAIkTRpP98zoo3g1zIsz0c6IedgW14HN9Xic9b8LZqCuXne2"/>
+</div>
+</div>
+</div>
+</header>
+<!-- Canvas -->
+<div class="flex-1 w-full max-w-[container-max] mx-auto px-6 md:px-12 py-12 relative z-10 flex flex-col gap-16">
+<!-- Header Section with Mesh Visual -->
+<section class="relative w-full h-[300px] border border-primary/20 rounded-sm overflow-hidden flex flex-col justify-between p-8 bg-[#0D0D0D]">
+<div class="absolute inset-0 grid-bg z-0"></div>
+<div class="absolute inset-0 mesh-bg z-0"></div>
+<div class="relative z-10 flex justify-between items-start">
+<div>
+<h2 class="font-display-lg text-display-lg text-primary mb-2">Protocol Ledger</h2>
+<div class="flex items-center gap-3 mt-4">
+<div class="w-2 h-2 bg-primary rounded-sm shadow-[0_0_8px_rgba(201,168,76,0.8)]"></div>
+<span class="font-label-caps text-label-caps text-on-surface-variant">System Nominal // Active Monitoring</span>
+</div>
+</div>
+<!-- Abstract Mesh Nodes Visualization -->
+<div class="hidden md:flex relative w-48 h-32 opacity-80">
+<div class="absolute top-1/4 left-1/4 w-2 h-2 border border-primary bg-surface z-10"></div>
+<div class="absolute top-1/2 left-3/4 w-3 h-3 border border-primary bg-primary/20 z-10"></div>
+<div class="absolute bottom-1/4 left-1/2 w-2 h-2 border border-primary bg-surface z-10"></div>
+<svg class="absolute inset-0 w-full h-full" preserveaspectratio="none" viewbox="0 0 100 100">
+<line stroke="#c9a84c" stroke-opacity="0.3" stroke-width="0.5" x1="25" x2="75" y1="25" y2="50"></line>
+<line stroke="#c9a84c" stroke-opacity="0.3" stroke-width="0.5" x1="75" x2="50" y1="50" y2="75"></line>
+<line stroke="#c9a84c" stroke-opacity="0.3" stroke-width="0.5" x1="25" x2="50" y1="25" y2="75"></line>
+</svg>
+</div>
+</div>
+<!-- Filters -->
+<div class="relative z-10 border-t border-primary/20 pt-6 flex flex-wrap gap-4 mt-8">
+<button class="px-4 py-2 border border-primary text-primary font-label-caps text-label-caps bg-primary/20 hover:bg-primary/30 transition-colors">
+                        All Events
+                    </button>
+<button class="px-4 py-2 border border-primary/30 text-on-surface-variant font-label-caps text-label-caps bg-[#0D0D0D] hover:border-primary/60 transition-colors">
+                        Heartbeats
+                    </button>
+<button class="px-4 py-2 border border-primary/30 text-on-surface-variant font-label-caps text-label-caps bg-[#0D0D0D] hover:border-primary/60 transition-colors">
+                        Swaps
+                    </button>
+<button class="px-4 py-2 border border-primary/30 text-on-surface-variant font-label-caps text-label-caps bg-[#0D0D0D] hover:border-primary/60 transition-colors">
+                        Warnings
+                    </button>
+</div>
+</section>
+<!-- Timeline Section -->
+<section class="relative w-full max-w-4xl mx-auto pl-4">
+<div class="timeline-line"></div>
+<div class="flex flex-col gap-12">
+<!-- Event Item -->
+<div class="relative pl-12 group">
+<!-- Node -->
+<div class="absolute left-[-5px] top-1 w-[14px] h-[14px] bg-surface border border-primary flex items-center justify-center timeline-node shadow-[0_0_10px_rgba(201,168,76,0.1)] group-hover:shadow-[0_0_15px_rgba(201,168,76,0.4)] transition-shadow">
+<div class="w-1 h-1 bg-primary"></div>
+</div>
+<!-- Content -->
+<div class="flex flex-col gap-2">
+<div class="flex items-center gap-4 text-on-surface-variant font-label-caps text-label-caps">
+<span>2024.10.24 // 14:32:00 UTC</span>
+<span class="px-2 py-1 border border-primary/30 text-primary">SWAP</span>
+</div>
+<div class="border-b border-primary/20 pb-6 mt-2">
+<h3 class="font-title-sm text-title-sm mb-2 text-[#E8E0CC]">analyst.deadagent.eth</h3>
+<p class="font-body-reg text-body-reg text-[#E8E0CC]/80">
+                                    Executed strategic rebalance. Swapped 14.5 WETH for 32,450 USDC to maintain target portfolio allocation. Transaction confirmed on block 18459201.
+                                </p>
+</div>
+</div>
+</div>
+<!-- Event Item -->
+<div class="relative pl-12 group">
+<div class="absolute left-[-5px] top-1 w-[14px] h-[14px] bg-surface border border-primary/50 flex items-center justify-center timeline-node">
+<div class="w-1 h-1 bg-primary/50"></div>
+</div>
+<div class="flex flex-col gap-2">
+<div class="flex items-center gap-4 text-on-surface-variant font-label-caps text-label-caps">
+<span>2024.10.24 // 12:00:00 UTC</span>
+<span class="px-2 py-1 border border-outline-variant text-on-surface-variant">HEARTBEAT</span>
+</div>
+<div class="border-b border-primary/10 pb-6 mt-2">
+<h3 class="font-title-sm text-title-sm mb-2 text-[#E8E0CC]">oracle.deadagent.eth</h3>
+<p class="font-body-reg text-body-reg text-[#E8E0CC]/80">
+                                    Routine protocol check. All off-chain integrations reporting nominal status. Multi-sig signers present and active.
+                                </p>
+</div>
+</div>
+</div>
+<!-- Event Item -->
+<div class="relative pl-12 group">
+<div class="absolute left-[-5px] top-1 w-[14px] h-[14px] bg-surface border border-error/70 flex items-center justify-center timeline-node shadow-[0_0_10px_rgba(255,180,171,0.2)]">
+<div class="w-1 h-1 bg-error/70"></div>
+</div>
+<div class="flex flex-col gap-2">
+<div class="flex items-center gap-4 text-on-surface-variant font-label-caps text-label-caps">
+<span>2024.10.23 // 18:45:12 UTC</span>
+<span class="px-2 py-1 border border-error/50 text-error">WARNING</span>
+</div>
+<div class="border-b border-error/20 pb-6 mt-2">
+<h3 class="font-title-sm text-title-sm mb-2 text-[#E8E0CC]">guardian.deadagent.eth</h3>
+<p class="font-body-reg text-body-reg text-[#E8E0CC]/80">
+                                    Detected anomalous gas price spike during scheduled execution window. Operation deferred to secondary timeblock.
+                                </p>
+</div>
+</div>
+</div>
+<!-- Event Item -->
+<div class="relative pl-12 group">
+<div class="absolute left-[-5px] top-1 w-[14px] h-[14px] bg-surface border border-primary/50 flex items-center justify-center timeline-node">
+<div class="w-1 h-1 bg-primary/50"></div>
+</div>
+<div class="flex flex-col gap-2">
+<div class="flex items-center gap-4 text-on-surface-variant font-label-caps text-label-caps">
+<span>2024.10.23 // 12:00:00 UTC</span>
+<span class="px-2 py-1 border border-outline-variant text-on-surface-variant">HEARTBEAT</span>
+</div>
+<div class="border-b border-primary/10 pb-6 mt-2">
+<h3 class="font-title-sm text-title-sm mb-2 text-[#E8E0CC]">oracle.deadagent.eth</h3>
+<p class="font-body-reg text-body-reg text-[#E8E0CC]/80">
+                                    Routine protocol check. All off-chain integrations reporting nominal status. Multi-sig signers present and active.
+                                </p>
+</div>
+</div>
+</div>
+</div>
+<div class="mt-12 flex justify-center">
+<button class="px-8 py-3 border border-primary/30 text-on-surface-variant font-label-caps text-label-caps hover:border-primary transition-colors hover:text-primary">
+                        Load Older Records
+                    </button>
+</div>
+</section>
+</div>
+</main>
+</body></html>

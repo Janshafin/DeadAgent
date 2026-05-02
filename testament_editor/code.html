@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>DEADAGENT - Testament Editor</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;500;600;700&amp;family=Cormorant+Garamond:wght@300;400;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary-fixed-variant": "#35437e",
+                        "tertiary-fixed": "#dde1ff",
+                        "on-surface-variant": "#d0c5b2",
+                        "on-tertiary": "#1e2b66",
+                        "secondary": "#e1c379",
+                        "inverse-on-surface": "#303030",
+                        "surface-tint": "#e6c364",
+                        "on-primary": "#3d2e00",
+                        "on-error": "#690005",
+                        "on-secondary-fixed": "#241a00",
+                        "on-background": "#e4e2e1",
+                        "surface": "#131313",
+                        "surface-bright": "#393939",
+                        "secondary-fixed": "#ffdf93",
+                        "tertiary": "#b9c4ff",
+                        "primary-container": "#c9a84c",
+                        "on-secondary-fixed-variant": "#584404",
+                        "surface-container-low": "#1b1c1c",
+                        "outline": "#99907e",
+                        "outline-variant": "#4d4637",
+                        "inverse-primary": "#755b00",
+                        "background": "#131313",
+                        "on-tertiary-container": "#2e3b77",
+                        "surface-container-highest": "#353535",
+                        "error-container": "#93000a",
+                        "on-primary-container": "#503d00",
+                        "primary": "#e6c364",
+                        "surface-container": "#1f2020",
+                        "error": "#ffb4ab",
+                        "on-primary-fixed": "#241a00",
+                        "surface-dim": "#131313",
+                        "on-surface": "#e4e2e1",
+                        "on-tertiary-fixed": "#041451",
+                        "secondary-container": "#5b4606",
+                        "surface-container-high": "#2a2a2a",
+                        "primary-fixed": "#ffe08f",
+                        "primary-fixed-dim": "#e6c364",
+                        "surface-container-lowest": "#0e0e0e",
+                        "inverse-surface": "#e4e2e1",
+                        "secondary-fixed-dim": "#e1c379",
+                        "tertiary-container": "#9ba8eb",
+                        "surface-variant": "#353535",
+                        "tertiary-fixed-dim": "#b9c3ff",
+                        "on-secondary": "#3e2e00",
+                        "on-secondary-container": "#d2b56d",
+                        "on-primary-fixed-variant": "#584400",
+                        "on-error-container": "#ffdad6"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "section-gap": "128px",
+                        "container-max": "1200px",
+                        "gutter": "24px",
+                        "margin-lg": "64px",
+                        "unit": "4px"
+                    },
+                    "fontFamily": {
+                        "title-sm": ["Josefin Sans"],
+                        "label-caps": ["Josefin Sans"],
+                        "body-reg": ["Josefin Sans"],
+                        "headline-md": ["Cormorant Garamond"],
+                        "display-lg": ["Cormorant Garamond"]
+                    },
+                    "fontSize": {
+                        "title-sm": ["14px", { "lineHeight": "1.5", "letterSpacing": "0.15em", "fontWeight": "600" }],
+                        "label-caps": ["12px", { "lineHeight": "1", "letterSpacing": "0.2em", "fontWeight": "500" }],
+                        "body-reg": ["16px", { "lineHeight": "1.6", "letterSpacing": "0.01em", "fontWeight": "300" }],
+                        "headline-md": ["32px", { "lineHeight": "1.2", "fontWeight": "400" }],
+                        "display-lg": ["64px", { "lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "300" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        .icon-fill {
+            font-variation-settings: 'FILL' 1, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        
+        /* Custom Scrollbar for the minimalist aesthetic */
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #c9a84c30; }
+        ::-webkit-scrollbar-thumb:hover { background: #c9a84c80; }
+    </style>
+</head>
+<body class="bg-background text-on-background h-screen flex overflow-hidden selection:bg-primary-container/30 selection:text-primary">
+<!-- Shared Component: SideNavBar -->
+<nav class="bg-neutral-950 h-screen w-64 border-r border-yellow-600/30 flex flex-col py-8 z-20 shrink-0">
+<div class="px-8 mb-12">
+<h1 class="text-lg font-bold tracking-widest text-yellow-600 font-['Josefin_Sans']">DEADAGENT</h1>
+<p class="font-['Josefin_Sans'] uppercase tracking-[0.2em] text-[10px] text-neutral-500 mt-2">The Last Will Protocol</p>
+</div>
+<ul class="flex-1 flex flex-col gap-2 px-4 font-['Josefin_Sans'] uppercase tracking-[0.2em] text-[10px]">
+<li>
+<a class="flex items-center gap-4 px-4 py-3 text-neutral-500 hover:text-yellow-600/70 hover:bg-neutral-900 transition-all duration-300 scale-100 active:scale-95" href="#">
+<span class="material-symbols-outlined text-lg">grid_view</span>
+                    Dashboard
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-4 px-4 py-3 text-yellow-600 font-bold border-r-2 border-yellow-600 bg-yellow-600/5 transition-all duration-300 scale-100 active:scale-95" href="#">
+<span class="material-symbols-outlined text-lg icon-fill">edit_note</span>
+                    Testament Editor
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-4 px-4 py-3 text-neutral-500 hover:text-yellow-600/70 hover:bg-neutral-900 transition-all duration-300 scale-100 active:scale-95" href="#">
+<span class="material-symbols-outlined text-lg">shield</span>
+                    Agent Protocol
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-4 px-4 py-3 text-neutral-500 hover:text-yellow-600/70 hover:bg-neutral-900 transition-all duration-300 scale-100 active:scale-95" href="#">
+<span class="material-symbols-outlined text-lg">insights</span>
+                    Activity Ledger
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-4 px-4 py-3 text-neutral-500 hover:text-yellow-600/70 hover:bg-neutral-900 transition-all duration-300 scale-100 active:scale-95" href="#">
+<span class="material-symbols-outlined text-lg">settings</span>
+                    Vault Settings
+                </a>
+</li>
+</ul>
+<div class="px-8 mt-auto">
+<button class="w-full border border-yellow-600/30 text-yellow-600 py-3 font-['Josefin_Sans'] uppercase tracking-[0.2em] text-[10px] hover:bg-yellow-600/10 transition-colors">
+                Connect Wallet
+            </button>
+</div>
+</nav>
+<!-- Main Canvas -->
+<main class="flex-1 flex flex-col h-screen overflow-hidden relative">
+<!-- Shared Component: TopAppBar -->
+<header class="w-full sticky top-0 z-50 border-b border-yellow-600/30 bg-neutral-950/80 backdrop-blur-md flex justify-between items-center px-12 py-6 shrink-0">
+<div class="text-xl font-black text-yellow-600 font-['Josefin_Sans'] tracking-widest hidden md:block">
+                DEADAGENT
+            </div>
+<div class="flex items-center gap-8 ml-auto font-['Josefin_Sans'] tracking-widest">
+<button class="text-neutral-400 hover:text-yellow-500 transition-opacity">
+<span class="material-symbols-outlined animate-pulse">favorite</span>
+</button>
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-surface-container-highest border border-yellow-600/30 overflow-hidden" data-alt="A macro photograph of an abstract, dark obsidian sphere with veins of luminous gold running through it. The lighting is cinematic and low-key, highlighting the stark contrast and premium, luxurious aesthetic of the digital asset vault identity.">
+</div>
+<span class="text-yellow-600 text-sm font-light">0x71...C4A2</span>
+</div>
+</div>
+</header>
+<!-- Editor Canvas -->
+<div class="flex-1 overflow-y-auto px-8 md:px-16 py-12">
+<div class="max-w-[1600px] mx-auto w-full grid grid-cols-1 xl:grid-cols-12 gap-16 xl:gap-24">
+<!-- Left Panel: Form Controls -->
+<div class="xl:col-span-5 flex flex-col gap-12">
+<div class="flex flex-col gap-2 border-b border-primary/20 pb-6">
+<h2 class="font-title-sm text-title-sm text-primary uppercase">Protocol Parameters</h2>
+<p class="font-body-reg text-body-reg text-on-surface-variant text-sm">Define the cryptographic distribution of your legacy.</p>
+</div>
+<!-- Asset Allocation -->
+<section class="flex flex-col gap-8">
+<h3 class="font-label-caps text-label-caps text-on-surface">Asset Allocation</h3>
+<div class="flex flex-col gap-6">
+<!-- Slider 1 -->
+<div class="flex flex-col gap-2">
+<div class="flex justify-between font-label-caps text-label-caps text-on-surface-variant text-[10px]">
+<span>Main Wallet (ETH)</span>
+<span class="text-primary">60%</span>
+</div>
+<div class="h-1 w-full bg-surface-container-highest relative rounded-none">
+<div class="absolute left-0 top-0 h-full bg-primary" style="width: 60%;"></div>
+<div class="absolute top-1/2 -translate-y-1/2 w-1.5 h-3 bg-primary" style="left: 60%;"></div>
+</div>
+</div>
+<!-- Slider 2 -->
+<div class="flex flex-col gap-2">
+<div class="flex justify-between font-label-caps text-label-caps text-on-surface-variant text-[10px]">
+<span>Vault Reserve (USDC)</span>
+<span class="text-primary">25%</span>
+</div>
+<div class="h-1 w-full bg-surface-container-highest relative rounded-none">
+<div class="absolute left-0 top-0 h-full bg-primary" style="width: 25%;"></div>
+<div class="absolute top-1/2 -translate-y-1/2 w-1.5 h-3 bg-primary" style="left: 25%;"></div>
+</div>
+</div>
+<!-- Slider 3 -->
+<div class="flex flex-col gap-2">
+<div class="flex justify-between font-label-caps text-label-caps text-on-surface-variant text-[10px]">
+<span>Charity Pool (DAI)</span>
+<span class="text-primary">15%</span>
+</div>
+<div class="h-1 w-full bg-surface-container-highest relative rounded-none">
+<div class="absolute left-0 top-0 h-full bg-primary" style="width: 15%;"></div>
+<div class="absolute top-1/2 -translate-y-1/2 w-1.5 h-3 bg-primary" style="left: 15%;"></div>
+</div>
+</div>
+</div>
+</section>
+<!-- Heir Wallets -->
+<section class="flex flex-col gap-6">
+<h3 class="font-label-caps text-label-caps text-on-surface">Heir Wallets</h3>
+<div class="flex flex-col gap-4">
+<div class="relative">
+<label class="absolute -top-4 left-0 font-label-caps text-label-caps text-primary text-[9px]">Primary Beneficiary</label>
+<input class="w-full bg-transparent border-0 border-b border-primary/30 focus:border-primary focus:ring-0 text-on-surface font-body-reg text-body-reg py-2 px-0 transition-colors" placeholder="0x..." type="text" value="0x8fB9...92e1"/>
+</div>
+<div class="relative mt-4">
+<label class="absolute -top-4 left-0 font-label-caps text-label-caps text-on-surface-variant text-[9px]">Secondary Beneficiary</label>
+<input class="w-full bg-transparent border-0 border-b border-outline-variant focus:border-primary focus:ring-0 text-on-surface font-body-reg text-body-reg py-2 px-0 transition-colors placeholder:text-outline-variant" placeholder="Enter ENS or 0x Address" type="text"/>
+</div>
+</div>
+</section>
+<!-- Trigger Conditions -->
+<section class="flex flex-col gap-6">
+<h3 class="font-label-caps text-label-caps text-on-surface">Trigger Conditions</h3>
+<div class="relative">
+<select class="w-full bg-transparent border-0 border-b border-primary/30 focus:border-primary focus:ring-0 text-on-surface font-body-reg text-body-reg py-3 px-0 appearance-none transition-colors">
+<option class="bg-surface text-on-surface" value="inactivity">90-Day On-Chain Inactivity</option>
+<option class="bg-surface text-on-surface" value="oracle">Death Certificate Oracle</option>
+<option class="bg-surface text-on-surface" value="manual">Dead Man's Switch (Manual Ping)</option>
+</select>
+<span class="material-symbols-outlined absolute right-0 top-1/2 -translate-y-1/2 text-primary/50 pointer-events-none">expand_more</span>
+</div>
+</section>
+<!-- Agent Handoff Instructions -->
+<section class="flex flex-col gap-6">
+<h3 class="font-label-caps text-label-caps text-on-surface">Agent Handoff Instructions</h3>
+<textarea class="w-full bg-surface-container-low border border-primary/10 focus:border-primary/50 focus:ring-0 text-on-surface font-body-reg text-body-reg p-4 h-32 resize-none transition-colors placeholder:text-outline-variant" placeholder="Specify instructions for the AI execution agent..."></textarea>
+</section>
+<!-- Security & Action -->
+<section class="flex flex-col gap-8 mt-4">
+<label class="flex items-center justify-between cursor-pointer group">
+<span class="font-label-caps text-label-caps text-on-surface group-hover:text-primary transition-colors">Encrypted 0G Storage</span>
+<div class="relative">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-12 h-5 bg-surface-container-highest border border-primary/30 peer-checked:bg-primary/10 peer-checked:border-primary transition-colors"></div>
+<div class="absolute left-1 top-1 w-3 h-3 bg-outline-variant peer-checked:bg-primary peer-checked:translate-x-7 transition-all"></div>
+</div>
+</label>
+<button class="w-full bg-primary-container hover:bg-primary-fixed transition-colors flex items-center justify-center gap-3 py-5 rounded-[2px]">
+<span class="material-symbols-outlined text-on-primary-container icon-fill">lock</span>
+<span class="font-label-caps text-label-caps text-on-primary-container font-bold tracking-[0.25em]">SEAL TESTAMENT</span>
+</button>
+</section>
+</div>
+<!-- Right Panel: Real-time Preview -->
+<div class="xl:col-span-7 flex flex-col items-center">
+<div class="sticky top-12 w-full max-w-2xl bg-[#0e0e0e] border border-primary/20 shadow-2xl relative overflow-hidden flex flex-col p-12 md:p-16 min-h-[800px]">
+<!-- Decorative corner accents -->
+<div class="absolute top-0 left-0 w-8 h-8 border-t border-l border-primary/40 m-4"></div>
+<div class="absolute top-0 right-0 w-8 h-8 border-t border-r border-primary/40 m-4"></div>
+<div class="absolute bottom-0 left-0 w-8 h-8 border-b border-l border-primary/40 m-4"></div>
+<div class="absolute bottom-0 right-0 w-8 h-8 border-b border-r border-primary/40 m-4"></div>
+<!-- Document Header -->
+<div class="flex flex-col items-center text-center gap-6 mb-16 border-b border-primary/10 pb-12">
+<span class="material-symbols-outlined text-primary/30 text-4xl">assured_workload</span>
+<h1 class="font-display-lg text-display-lg text-primary tracking-widest uppercase">The Last Will <br/>&amp; Testament</h1>
+<div class="font-label-caps text-label-caps text-on-surface-variant flex flex-col gap-1">
+<span>Executed via the DeadAgent Protocol</span>
+<span class="text-outline-variant text-[10px]">Smart Contract: 0xDA...49b</span>
+</div>
+</div>
+<!-- Document Body -->
+<div class="flex flex-col gap-10 font-headline-md text-[22px] leading-relaxed text-on-surface-variant text-justify">
+<p>
+                                I, identified cryptographically by the wallet address <span class="text-primary tracking-widest font-body-reg text-sm mx-2">0x71...C4A2</span>, being of sound mind and digital presence, do hereby declare this instrument to be my definitive directive upon the verification of my absence.
+                            </p>
+<div class="pl-6 border-l border-primary/20 flex flex-col gap-4">
+<h4 class="font-label-caps text-label-caps text-primary mb-2">Article I. Trigger Verification</h4>
+<p class="text-lg">
+                                    The execution of these directives shall commence immediately following the unassailable on-chain verification of <span class="text-on-surface border-b border-primary/30 px-1">90-Day On-Chain Inactivity</span> across monitored addresses.
+                                </p>
+</div>
+<div class="pl-6 border-l border-primary/20 flex flex-col gap-4">
+<h4 class="font-label-caps text-label-caps text-primary mb-2">Article II. Asset Disbursement</h4>
+<p class="text-lg">
+                                    Total verified assets held within the Vault shall be algorithmically dispersed thusly:
+                                </p>
+<ul class="font-body-reg text-body-reg text-on-surface flex flex-col gap-3 mt-2">
+<li class="flex justify-between items-center border-b border-surface-container-highest pb-2">
+<span>Primary Heir <span class="text-outline-variant text-xs ml-2">(0x8fB9...92e1)</span></span>
+<span class="text-primary font-bold">60%</span>
+</li>
+<li class="flex justify-between items-center border-b border-surface-container-highest pb-2">
+<span>Vault Reserve Distribution</span>
+<span class="text-primary font-bold">25%</span>
+</li>
+<li class="flex justify-between items-center border-b border-surface-container-highest pb-2">
+<span>Charitable DAO Allocation</span>
+<span class="text-primary font-bold">15%</span>
+</li>
+</ul>
+</div>
+<div class="pl-6 border-l border-primary/20 flex flex-col gap-4 mt-4">
+<h4 class="font-label-caps text-label-caps text-primary mb-2">Article III. Agent Mandate</h4>
+<p class="text-lg text-outline-variant italic">
+                                    "Awaiting explicit instructions..."
+                                </p>
+</div>
+</div>
+<!-- Document Footer -->
+<div class="mt-auto pt-16 flex justify-between items-end border-t border-primary/10 font-label-caps text-label-caps text-outline-variant">
+<div class="flex flex-col gap-2">
+<span>Status</span>
+<div class="flex items-center gap-2">
+<div class="w-1.5 h-1.5 bg-outline-variant"></div>
+<span class="text-on-surface">Unsealed Draft</span>
+</div>
+</div>
+<div class="text-right flex flex-col gap-2">
+<span>Timestamp</span>
+<span>Pending Signature...</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>

@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>DeadAgent - Auth</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&amp;family=Josefin+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary-fixed-variant": "#35437e",
+                        "tertiary-fixed": "#dde1ff",
+                        "on-surface-variant": "#d0c5b2",
+                        "on-tertiary": "#1e2b66",
+                        "secondary": "#e1c379",
+                        "inverse-on-surface": "#303030",
+                        "surface-tint": "#e6c364",
+                        "on-primary": "#3d2e00",
+                        "on-error": "#690005",
+                        "on-secondary-fixed": "#241a00",
+                        "on-background": "#e4e2e1",
+                        "surface": "#131313",
+                        "surface-bright": "#393939",
+                        "secondary-fixed": "#ffdf93",
+                        "tertiary": "#b9c4ff",
+                        "primary-container": "#c9a84c",
+                        "on-secondary-fixed-variant": "#584404",
+                        "surface-container-low": "#1b1c1c",
+                        "outline": "#99907e",
+                        "outline-variant": "#4d4637",
+                        "inverse-primary": "#755b00",
+                        "background": "#131313",
+                        "on-tertiary-container": "#2e3b77",
+                        "surface-container-highest": "#353535",
+                        "error-container": "#93000a",
+                        "on-primary-container": "#503d00",
+                        "primary": "#e6c364",
+                        "surface-container": "#1f2020",
+                        "error": "#ffb4ab",
+                        "on-primary-fixed": "#241a00",
+                        "surface-dim": "#131313",
+                        "on-surface": "#e4e2e1",
+                        "on-tertiary-fixed": "#041451",
+                        "secondary-container": "#5b4606",
+                        "surface-container-high": "#2a2a2a",
+                        "primary-fixed": "#ffe08f",
+                        "primary-fixed-dim": "#e6c364",
+                        "surface-container-lowest": "#0e0e0e",
+                        "inverse-surface": "#e4e2e1",
+                        "secondary-fixed-dim": "#e1c379",
+                        "tertiary-container": "#9ba8eb",
+                        "surface-variant": "#353535",
+                        "tertiary-fixed-dim": "#b9c3ff",
+                        "on-secondary": "#3e2e00",
+                        "on-secondary-container": "#d2b56d",
+                        "on-primary-fixed-variant": "#584400",
+                        "on-error-container": "#ffdad6"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "section-gap": "128px",
+                        "container-max": "1200px",
+                        "gutter": "24px",
+                        "margin-lg": "64px",
+                        "unit": "4px"
+                    },
+                    "fontFamily": {
+                        "title-sm": ["Josefin Sans"],
+                        "label-caps": ["Josefin Sans"],
+                        "body-reg": ["Josefin Sans"],
+                        "headline-md": ["Cormorant Garamond"],
+                        "display-lg": ["Cormorant Garamond"]
+                    },
+                    "fontSize": {
+                        "title-sm": ["14px", { "lineHeight": "1.5", "letterSpacing": "0.15em", "fontWeight": "600" }],
+                        "label-caps": ["12px", { "lineHeight": "1", "letterSpacing": "0.2em", "fontWeight": "500" }],
+                        "body-reg": ["16px", { "lineHeight": "1.6", "letterSpacing": "0.01em", "fontWeight": "300" }],
+                        "headline-md": ["32px", { "lineHeight": "1.2", "fontWeight": "400" }],
+                        "display-lg": ["64px", { "lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "300" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-outlined.fill {
+            font-variation-settings: 'FILL' 1;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface min-h-screen w-full flex flex-col antialiased selection:bg-primary-container selection:text-on-primary-container overflow-hidden">
+<!-- Abstract ambient background texture to fulfill image requirement and add luxury feel -->
+<div class="absolute inset-0 z-0 opacity-20 mix-blend-overlay pointer-events-none">
+<img alt="Background Texture" class="w-full h-full object-cover" data-alt="A highly detailed, macro photograph of polished black obsidian stone showing subtle linear striations and faint golden flecks embedded within the dark matrix. The lighting is dramatic and raking, highlighting the smooth, glass-like texture and creating deep, impenetrable shadows. The overall aesthetic is one of extreme luxury, permanence, and sophisticated minimalism, perfectly suited for a high-end digital vault interface." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBytFpDoIMhWBT2bmqAGSRKybPOA-Nkrz_1StKVrfNiaD1kAbH5pXWMxBI6k7jKXaIDXteGQT7b2s00kQ16aXac51ChiJthCWws1svQzTGdXkrYUwYVbZPmLet6cE02iJKb3EI0mxv1ZyYGAgwgAX-rwmyejQrLGr3EYlP2vVpPVqWR1ItISdkVESRqSQpzQOQ_Z7rKZ0CbmdVfEhe2kSFrfFMA0Ppv3DJ1MZOC83T8O7Ptd_rdYgw7bOI_TYzwrinbbTj2iCrJXxk4"/>
+</div>
+<!-- Centered Modal Canvas -->
+<main class="relative z-10 flex-1 flex items-center justify-center p-gutter">
+<!-- Luxury Modal Container -->
+<section class="w-full max-w-[500px] bg-surface-container-lowest border border-primary-container/20 p-12 flex flex-col gap-12 relative shadow-2xl shadow-black">
+<!-- Corner Accents (Architectural wireframe feel) -->
+<div class="absolute top-0 left-0 w-4 h-4 border-t border-l border-primary-container/50"></div>
+<div class="absolute top-0 right-0 w-4 h-4 border-t border-r border-primary-container/50"></div>
+<div class="absolute bottom-0 left-0 w-4 h-4 border-b border-l border-primary-container/50"></div>
+<div class="absolute bottom-0 right-0 w-4 h-4 border-b border-r border-primary-container/50"></div>
+<!-- Header -->
+<header class="flex flex-col items-center text-center gap-6">
+<div class="font-title-sm text-title-sm text-primary uppercase tracking-[0.3em]">
+                    Deadagent Protocol
+                </div>
+<h1 class="font-headline-md text-headline-md text-on-surface">
+                    Initialize Vault Connection
+                </h1>
+<p class="font-body-reg text-body-reg text-on-surface-variant max-w-sm">
+                    Authenticate your identity to access secured heritage assets and cryptographic testaments.
+                </p>
+</header>
+<!-- Auth Options -->
+<div class="flex flex-col gap-4">
+<!-- Option: MetaMask -->
+<button class="group w-full flex items-center justify-between p-5 bg-transparent border border-primary-container/30 hover:bg-primary-container transition-all duration-500 ease-out cursor-pointer relative overflow-hidden">
+<div class="flex items-center gap-4 relative z-10">
+<span class="material-symbols-outlined text-primary group-hover:text-on-primary transition-colors duration-500">
+                            account_balance_wallet
+                        </span>
+<span class="font-label-caps text-label-caps text-primary group-hover:text-on-primary uppercase tracking-widest transition-colors duration-500">
+                            MetaMask
+                        </span>
+</div>
+<span class="material-symbols-outlined text-primary/50 group-hover:text-on-primary relative z-10 transition-colors duration-500">
+                        chevron_right
+                    </span>
+</button>
+<!-- Option: WalletConnect -->
+<button class="group w-full flex items-center justify-between p-5 bg-transparent border border-primary-container/30 hover:bg-primary-container transition-all duration-500 ease-out cursor-pointer relative overflow-hidden">
+<div class="flex items-center gap-4 relative z-10">
+<span class="material-symbols-outlined text-primary group-hover:text-on-primary transition-colors duration-500">
+                            qr_code_scanner
+                        </span>
+<span class="font-label-caps text-label-caps text-primary group-hover:text-on-primary uppercase tracking-widest transition-colors duration-500">
+                            WalletConnect
+                        </span>
+</div>
+<span class="material-symbols-outlined text-primary/50 group-hover:text-on-primary relative z-10 transition-colors duration-500">
+                        chevron_right
+                    </span>
+</button>
+<!-- Option: Coinbase Wallet -->
+<button class="group w-full flex items-center justify-between p-5 bg-transparent border border-primary-container/30 hover:bg-primary-container transition-all duration-500 ease-out cursor-pointer relative overflow-hidden">
+<div class="flex items-center gap-4 relative z-10">
+<span class="material-symbols-outlined text-primary group-hover:text-on-primary transition-colors duration-500">
+                            link
+                        </span>
+<span class="font-label-caps text-label-caps text-primary group-hover:text-on-primary uppercase tracking-widest transition-colors duration-500">
+                            Coinbase Wallet
+                        </span>
+</div>
+<span class="material-symbols-outlined text-primary/50 group-hover:text-on-primary relative z-10 transition-colors duration-500">
+                        chevron_right
+                    </span>
+</button>
+</div>
+<!-- Security Badge -->
+<div class="flex items-center justify-center gap-2 opacity-60">
+<span class="material-symbols-outlined text-[16px] text-primary">
+                    shield
+                </span>
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase">
+                    Protected by AXL Encryption
+                </span>
+</div>
+<!-- Divider -->
+<div class="w-full h-px bg-primary-container/10"></div>
+<!-- Success State Simulation (ENS Resolution) -->
+<div class="flex flex-col gap-3">
+<span class="font-label-caps text-label-caps text-on-surface-variant opacity-50 uppercase text-center">
+                    Active Session Detected
+                </span>
+<div class="w-full flex items-center justify-between p-4 bg-surface-container-low border border-primary-container/20">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 flex items-center justify-center border border-primary-container/30 rounded-sm bg-surface">
+<span class="material-symbols-outlined text-[18px] text-primary">
+                                verified_user
+                            </span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-caps text-[10px] text-on-surface-variant uppercase tracking-widest opacity-70">
+                                Connected as
+                            </span>
+<span class="font-title-sm text-title-sm text-primary tracking-widest">
+                                vault.deadagent.eth
+                            </span>
+</div>
+</div>
+<button class="font-label-caps text-[10px] text-primary border-b border-primary-container/30 pb-1 hover:border-primary transition-colors uppercase tracking-widest">
+                        Disconnect
+                    </button>
+</div>
+</div>
+</section>
+</main>
+</body></html>
