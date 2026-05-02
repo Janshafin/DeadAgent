@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { useConnect, useAccount, useDisconnect, useEnsName } from 'wagmi';
 import { mainnet } from 'wagmi/chains';
 import { useWalletStore } from '@/lib/store/useWalletStore';
@@ -11,6 +12,7 @@ interface WalletModalProps {
 }
 
 export function WalletModal({ isOpen, onClose }: WalletModalProps) {
+  const router = useRouter();
   const { connectors, connectAsync } = useConnect();
   const { disconnect } = useDisconnect();
   const { address, isConnected, chainId } = useAccount();
@@ -33,6 +35,12 @@ export function WalletModal({ isOpen, onClose }: WalletModalProps) {
         chainId,
       });
 
+      // Auto-redirect to dashboard after brief delay
+      const redirectTimer = setTimeout(() => {
+        onClose();
+        router.push('/dashboard');
+      }, 1500);
+
       // Firebase auth - gracefully handle if not configured
       import('@/lib/firebase/config').then(async ({ auth, db }) => {
         try {
@@ -50,9 +58,12 @@ export function WalletModal({ isOpen, onClose }: WalletModalProps) {
           console.warn('Firebase auth skipped (not configured):', err);
         }
       });
+
+      return () => clearTimeout(redirectTimer);
     } else {
       clearWallet();
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isConnected, address, ensName, chainId, setWalletInfo, clearWallet]);
 
   if (!isOpen) return null;
@@ -124,7 +135,7 @@ export function WalletModal({ isOpen, onClose }: WalletModalProps) {
             ))}
           </div>
         ) : (
-          <div className="flex flex-col gap-3">
+          <div className="flex flex-col gap-6">
             <span className="font-sans text-[12px] font-medium text-[#d0c5b2] opacity-50 uppercase tracking-[0.2em] text-center">
                 Active Session Detected
             </span>
@@ -148,6 +159,18 @@ export function WalletModal({ isOpen, onClose }: WalletModalProps) {
                 Disconnect
               </button>
             </div>
+
+            {/* ── Primary CTA: Enter Dashboard ────────────── */}
+            <button
+              onClick={() => { onClose(); router.push('/dashboard'); }}
+              className="w-full bg-[#c9a84c] border border-[#c9a84c] text-[#1a1400] font-sans text-[12px] font-bold uppercase tracking-[0.25em] py-4 px-8 rounded-sm hover:bg-[#e2c47a] hover:border-[#e2c47a] transition-all duration-300 flex items-center justify-center gap-3"
+            >
+              <span>Enter Vault</span>
+              <span className="text-[16px]">→</span>
+            </button>
+            <p className="text-center font-sans text-[10px] text-[#d0c5b2]/40 uppercase tracking-[0.2em]">
+              Redirecting automatically…
+            </p>
           </div>
         )}
 
