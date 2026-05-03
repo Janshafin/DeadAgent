@@ -36,10 +36,10 @@ export function WalletModal({ isOpen, onClose }: WalletModalProps) {
       });
 
       // Auto-redirect to dashboard after brief delay
-      const redirectTimer = setTimeout(() => {
-        onClose();
-        router.push('/dashboard');
-      }, 1500);
+      // const redirectTimer = setTimeout(() => {
+      //   onClose();
+      //   router.push('/dashboard');
+      // }, 1500);
 
       // Firebase auth - gracefully handle if not configured
       import('@/lib/firebase/config').then(async ({ auth, db }) => {
@@ -59,7 +59,7 @@ export function WalletModal({ isOpen, onClose }: WalletModalProps) {
         }
       });
 
-      return () => clearTimeout(redirectTimer);
+      return () => {};
     } else {
       clearWallet();
     }
