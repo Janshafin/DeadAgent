@@ -70,7 +70,7 @@ function FieldError({ message }: { message?: string }) {
 const SERVICES = [
   { name: '0G Storage', icon: 'cloud', status: 'connected' as const },
   { name: 'Axelar GMP', icon: 'lan', status: 'connected' as const },
-  { name: 'KeeperHub', icon: 'hub', status: 'pending' as const },
+  { name: 'KeeperHub', icon: 'hub', status: 'connected' as const },
   { name: 'Uniswap V3', icon: 'swap_horiz', status: 'connected' as const },
 ];
 
