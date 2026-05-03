@@ -21,7 +21,7 @@ export function use0gStorage() {
     try {
       // Stringify and "encrypt" the data for storage
       const payloadString = JSON.stringify(testamentData);
-      const mockEncrypted = `0g_enc_${Buffer.from(payloadString).toString('base64')}`;
+      const mockEncrypted = `0g_enc_${btoa(payloadString)}`;
 
       // Call the 0G integration to store data and get a Sepolia TX Hash
       const { txHash: hash } = await storeTestamentOn0G(mockEncrypted, address);
