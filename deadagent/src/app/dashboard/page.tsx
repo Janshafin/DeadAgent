@@ -7,7 +7,7 @@ import { AgentGrid, Agent } from '@/components/dashboard/AgentGrid';
 // ─── Mock data (simulates Firestore /users/{uid}/stats and /users/{uid}/agents) ───
 const MOCK_STATS = {
   activeAgents: 3,
-  protectedAssets: '$742k',
+  protectedAssets: '0.50 ETH',
   heartbeatStatus: 'Active' as const,
   daysUntilReview: 12,
 };

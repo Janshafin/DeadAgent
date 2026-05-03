@@ -20,13 +20,16 @@ export async function storeTestamentOn0G(
     transport: custom(window.ethereum)
   });
 
+  await window.ethereum.request({ method: 'eth_requestAccounts' });
+  const [activeAccount] = await walletClient.getAddresses();
+
   // Convert the testament data to hex for the transaction data field
   const dataHex = stringToHex(encryptedData);
 
   // Submit a 0-value self-transaction on Sepolia with the data payload
   const txHash = await walletClient.sendTransaction({
-    account: userAddress as `0x${string}`,
-    to: userAddress as `0x${string}`, // Send to self
+    account: activeAccount,
+    to: activeAccount, // Send to self
     value: BigInt(0),
     data: dataHex,
   });

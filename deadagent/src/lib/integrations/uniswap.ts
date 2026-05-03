@@ -31,6 +31,9 @@ export async function executeSuccessionSwap(
     transport: custom(window.ethereum)
   });
 
+  await window.ethereum.request({ method: 'eth_requestAccounts' });
+  const [activeAccount] = await walletClient.getAddresses();
+
   // We construct the swap params. For a real swap, we would need to approve the token first.
   // For the hackathon demo, we submit the transaction. If it fails execution on-chain 
   // (e.g., due to no allowance), it still generates a valid TX hash, which fulfills the requirement.
@@ -41,7 +44,7 @@ export async function executeSuccessionSwap(
       tokenIn: WETH_ADDRESS,
       tokenOut: USDC_ADDRESS,
       fee: 3000,
-      recipient: userAddress as `0x${string}`,
+      recipient: activeAccount,
       amountIn: BigInt(100000000000000), // 0.0001 WETH
       amountOutMinimum: BigInt(0),
       sqrtPriceLimitX96: BigInt(0),
@@ -50,7 +53,7 @@ export async function executeSuccessionSwap(
 
   // Submit the transaction to Uniswap Router on Sepolia
   const txHash = await walletClient.sendTransaction({
-    account: userAddress as `0x${string}`,
+    account: activeAccount,
     to: UNISWAP_ROUTER_ADDRESS,
     value: BigInt(0), 
     data: dataHex,

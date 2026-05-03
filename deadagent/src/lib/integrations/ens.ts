@@ -26,18 +26,21 @@ export async function registerEnsSubname(
     transport: custom(window.ethereum)
   });
 
+  await window.ethereum.request({ method: 'eth_requestAccounts' });
+  const [activeAccount] = await walletClient.getAddresses();
+
   // We encode the function data for the subname registration
   // Even if the contract doesn't perfectly match this ABI, sending the TX 
   // will generate a verifiable Etherscan hash for the hackathon proof.
   const dataHex = encodeFunctionData({
     abi: ENS_ABI,
     functionName: 'registerSubname',
-    args: [subname, userAddress as `0x${string}`],
+    args: [subname, activeAccount],
   });
 
   // Submit the transaction to the ENS Controller on Sepolia
   const txHash = await walletClient.sendTransaction({
-    account: userAddress as `0x${string}`,
+    account: activeAccount,
     to: ENS_CONTROLLER_ADDRESS,
     value: BigInt(0), // Registration might cost 0 for testnet subnames
     data: dataHex,

@@ -26,15 +26,18 @@ export async function registerKeeperJob(
     transport: custom(window.ethereum)
   });
 
+  await window.ethereum.request({ method: 'eth_requestAccounts' });
+  const [activeAccount] = await walletClient.getAddresses();
+
   const dataHex = encodeFunctionData({
     abi: KEEPER_ABI,
     functionName: 'registerHeartbeatJob',
-    args: [userAddress as `0x${string}`, BigInt(intervalDays)],
+    args: [activeAccount, BigInt(intervalDays)],
   });
 
   // Submit the transaction to KeeperHub on Sepolia
   const txHash = await walletClient.sendTransaction({
-    account: userAddress as `0x${string}`,
+    account: activeAccount,
     to: KEEPERHUB_ADDRESS,
     value: BigInt(0), 
     data: dataHex,
