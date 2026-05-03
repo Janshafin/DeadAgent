@@ -32,7 +32,7 @@ export function TestamentEditor() {
   const [instructions, setInstructions] = useState('');
   const [heirs, setHeirs] = useState<string[]>(['']);
   const [trigger, setTrigger] = useState<TriggerType>('inactivity_90');
-  const [useZeroG, setUseZeroG] = useState(false);
+  const [useZeroG, setUseZeroG] = useState(true);
   
   // UI State
   const [isSealing, setIsSealing] = useState(false);
@@ -107,9 +107,14 @@ export function TestamentEditor() {
       const payloadString = JSON.stringify(testamentData);
 
       // 2. Encrypt with user's public key (Mocking with signature -> symmetric key concept)
-      // In a real app we might use eth-crypto or Lit Protocol for actual encryption.
-      // Here we sign the hash to prove intent and simulate encryption blob.
-      const signature = await signMessageAsync({ message: `SEAL TESTAMENT:\n${payloadString}` });
+      let signature;
+      try {
+        signature = await signMessageAsync({ message: `SEAL TESTAMENT:\n${payloadString}` });
+      } catch (err: any) {
+        alert('Signature failed: ' + err.message);
+        setIsSealing(false);
+        return;
+      }
       const mockEncryptedBlob = btoa(payloadString + signature);
 
       // 3. Store to 0G if requested or fallback to mock
@@ -119,19 +124,19 @@ export function TestamentEditor() {
       }
 
       // 4. Store encrypted blob to Firestore (with exponential backoff)
-      try {
-         await firestoreWriteWithRetry(
-           () => setDoc(doc(db, 'testaments', address), {
-              blob: mockEncryptedBlob,
-              txHash: finalTxHash,
-              updatedAt: new Date().toISOString(),
-              status: 'sealed'
-           }),
-           'Testament seal',
-         );
-      } catch (err) {
-         console.warn("Firestore write failed (likely mock config), continuing...", err);
-      }
+      // try {
+      //    await firestoreWriteWithRetry(
+      //      () => setDoc(doc(db, 'testaments', address), {
+      //         blob: mockEncryptedBlob,
+      //         txHash: finalTxHash,
+      //         updatedAt: new Date().toISOString(),
+      //         status: 'sealed'
+      //      }),
+      //      'Testament seal',
+      //    );
+      // } catch (err) {
+      //    console.warn("Firestore write failed (likely mock config), continuing...", err);
+      // }
 
       // 5. Emit event to AXL (mock endpoint)
       console.log('Emitting AXL Event: TestamentSealed', { owner: address, trigger });
