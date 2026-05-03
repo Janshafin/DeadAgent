@@ -81,7 +81,7 @@ export function TestamentEditor() {
 
   const isValid = 
     ethAlloc[0] + ercAlloc[0] === 100 &&
-    heirs.some(h => h.trim().length > 0 && isAddress(h.trim())) &&
+    heirs.some(h => h.trim().length > 0) &&
     instructions.trim().length > 0;
 
   const handleSeal = async () => {
@@ -92,7 +92,7 @@ export function TestamentEditor() {
       // 1. Encode testament as JSON
       // Sanitize inputs before encoding
       const sanitizedInstructions = instructions.replace(/[<>]/g, '');
-      const validHeirs = heirs.filter(h => h.trim() !== '' && isAddress(h.trim()));
+      const validHeirs = heirs.filter(h => h.trim() !== '');
 
       const testamentData = {
         owner: address,
