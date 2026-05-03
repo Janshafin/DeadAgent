@@ -9,6 +9,7 @@ import { doc, setDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase/config';
 import { firestoreWriteWithRetry } from '@/lib/firebase/retryWrite';
 import { isAddress } from 'viem';
+import { use0gStorage } from '@/hooks/use0gStorage';
 
 type TriggerType = 'inactivity_30' | 'inactivity_90' | 'inactivity_180' | 'date' | 'consensus';
 
@@ -35,6 +36,7 @@ export function TestamentEditor() {
   
   // UI State
   const [isSealing, setIsSealing] = useState(false);
+  const { uploadTestament, isUploading, txHash } = use0gStorage();
   const [showSuccess, setShowSuccess] = useState(false);
   const [previewData, setPreviewData] = useState<PreviewData | null>(null);
 
@@ -110,11 +112,18 @@ export function TestamentEditor() {
       const signature = await signMessageAsync({ message: `SEAL TESTAMENT:\n${payloadString}` });
       const mockEncryptedBlob = btoa(payloadString + signature);
 
-      // 3. Store encrypted blob to Firestore (with exponential backoff)
+      // 3. Store to 0G if requested or fallback to mock
+      let finalTxHash = null;
+      if (useZeroG) {
+        finalTxHash = await uploadTestament(testamentData);
+      }
+
+      // 4. Store encrypted blob to Firestore (with exponential backoff)
       try {
          await firestoreWriteWithRetry(
            () => setDoc(doc(db, 'testaments', address), {
               blob: mockEncryptedBlob,
+              txHash: finalTxHash,
               updatedAt: new Date().toISOString(),
               status: 'sealed'
            }),
@@ -124,10 +133,10 @@ export function TestamentEditor() {
          console.warn("Firestore write failed (likely mock config), continuing...", err);
       }
 
-      // 4. Emit event to AXL (mock endpoint)
+      // 5. Emit event to AXL (mock endpoint)
       console.log('Emitting AXL Event: TestamentSealed', { owner: address, trigger });
 
-      // 5. Show success modal
+      // 6. Show success modal
       setShowSuccess(true);
     } catch (error) {
       console.error('Failed to seal testament:', error);
@@ -286,12 +295,12 @@ export function TestamentEditor() {
         <div className="mt-auto pt-8">
           <button
             onClick={handleSeal}
-            disabled={!isValid || isSealing || !address}
+            disabled={!isValid || isSealing || isUploading || !address}
             className={`w-full py-4 uppercase tracking-[0.3em] text-[12px] font-bold rounded-sm transition-all duration-500
               ${(!isValid || !address) ? 'bg-[#141415] text-[#555] border border-[#333] cursor-not-allowed' 
               : 'bg-[#c9a84c] text-[#0A0A0B] hover:bg-[#e2c47a] hover:shadow-[0_0_20px_rgba(201,168,76,0.3)]'}`}
           >
-            {isSealing ? 'Sealing...' : 'Seal Testament'}
+            {isSealing || isUploading ? 'Sealing & Storing...' : 'Seal Testament'}
           </button>
         </div>
       </div>
@@ -398,6 +407,21 @@ export function TestamentEditor() {
                   Your digital legacy has been encrypted and securely stored. Your agents will monitor the trigger conditions.
                 </Dialog.Description>
               </div>
+              
+              {txHash && (
+                <div className="w-full bg-[#1b1c1c] border border-[#c9a84c]/20 p-4 rounded-sm text-left">
+                  <p className="text-[10px] text-[#c9a84c] uppercase tracking-wider mb-1">0G Storage Verification</p>
+                  <a 
+                    href={`${process.env.NEXT_PUBLIC_ETHERSCAN_BASE}${txHash}`}
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="font-mono text-[11px] text-blue-400 hover:text-blue-300 break-all block truncate"
+                  >
+                    {txHash}
+                  </a>
+                </div>
+              )}
+
               <Dialog.Close asChild>
                 <button className="mt-4 w-full bg-transparent border border-[#c9a84c] text-[#c9a84c] hover:bg-[#c9a84c]/10 py-3 uppercase tracking-[0.2em] text-[12px] font-bold rounded-sm transition-colors">
                   Return to Dashboard

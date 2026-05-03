@@ -13,6 +13,7 @@ import {
 import { useWalletStore } from '@/lib/store/useWalletStore';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { FeedSkeleton, SkeletonBlock } from '@/components/ui/Skeletons';
+import { useUniswap } from '@/hooks/useUniswap';
 import type { AgentEvent, FilterTab } from '@/components/dashboard/activity/types';
 
 const AXLMeshVisualiser = dynamic(
@@ -27,6 +28,8 @@ export default function ActivityPage() {
   const [selectedAgent, setSelectedAgent] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isFirestoreLive, setIsFirestoreLive] = useState(false);
+  
+  const { simulateSuccessionSwap, isSwapping, txHash: uniswapTxHash } = useUniswap();
 
   const uid = address || 'demo-user';
 
@@ -37,29 +40,45 @@ export default function ActivityPage() {
     let cancelled = false;
 
     async function init() {
-      try {
-        // 1. Seed 20 events into Firestore if the collection is empty
-        await seedEventsIfEmpty(uid);
+      // Race Firestore init against a timeout — mock credentials cause the
+      // SDK to hang indefinitely, so we cap the wait at 4 seconds.
+      const FIRESTORE_TIMEOUT_MS = 4000;
 
-        // 2. Attach onSnapshot real-time listener
-        unsubscribe = subscribeToEvents(
-          uid,
-          (firestoreEvents) => {
-            if (cancelled) return;
-            setEvents(firestoreEvents);
-            setIsFirestoreLive(true);
-            setIsLoading(false);
-          },
-          (err) => {
-            // Firestore failed — fall back to local mock data
-            console.warn('Firestore listener error, using mock fallback:', err.message);
-            if (cancelled) return;
-            fallbackToMock();
-          },
-        );
-      } catch {
-        // Seed or connection failed — fall back
-        console.warn('Firestore unavailable, using mock fallback.');
+      const firestoreReady = new Promise<void>((resolve, reject) => {
+        (async () => {
+          try {
+            // 1. Seed 20 events into Firestore if the collection is empty
+            await seedEventsIfEmpty(uid);
+
+            // 2. Attach onSnapshot real-time listener
+            unsubscribe = subscribeToEvents(
+              uid,
+              (firestoreEvents) => {
+                if (cancelled) return;
+                setEvents(firestoreEvents);
+                setIsFirestoreLive(true);
+                setIsLoading(false);
+                resolve();
+              },
+              (err) => {
+                reject(err);
+              },
+            );
+          } catch (err) {
+            reject(err);
+          }
+        })();
+      });
+
+      const timeout = new Promise<never>((_, reject) =>
+        setTimeout(() => reject(new Error('Firestore connection timed out')), FIRESTORE_TIMEOUT_MS),
+      );
+
+      try {
+        await Promise.race([firestoreReady, timeout]);
+      } catch (err) {
+        const msg = err instanceof Error ? err.message : String(err);
+        console.warn('Firestore unavailable, using mock fallback:', msg);
         if (!cancelled) fallbackToMock();
       }
     }
@@ -187,6 +206,16 @@ export default function ActivityPage() {
         </div>
         <div className="flex items-center gap-4">
           <button
+            onClick={simulateSuccessionSwap}
+            disabled={isSwapping}
+            className="flex items-center gap-2 border border-purple-500/20 hover:border-purple-500/50 bg-purple-500/5 hover:bg-purple-500/10 rounded-sm px-4 py-2 transition-all duration-300 disabled:opacity-50"
+          >
+            <span className="material-symbols-outlined text-purple-400 text-[16px]">swap_horiz</span>
+            <span className="font-sans text-[10px] font-medium uppercase tracking-[0.2em] text-purple-400">
+              {isSwapping ? 'Swapping...' : 'Simulate Token Swap'}
+            </span>
+          </button>
+          <button
             onClick={handleInjectEvent}
             className="flex items-center gap-2 border border-[#c9a84c]/20 hover:border-[#c9a84c]/50 bg-[#c9a84c]/5 hover:bg-[#c9a84c]/10 rounded-sm px-4 py-2 transition-all duration-300"
           >
@@ -198,6 +227,31 @@ export default function ActivityPage() {
           <FilterTabs active={activeTab} onChange={setActiveTab} counts={counts} />
         </div>
       </div>
+
+      {/* Uniswap TX Hash Banner */}
+      {uniswapTxHash && (
+        <div className="bg-[#1b1c1c] border border-purple-500/30 rounded-sm p-4 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <span className="material-symbols-outlined text-purple-400 text-[24px]">verified</span>
+            <div className="flex flex-col">
+              <span className="font-sans text-[12px] font-medium text-purple-400 uppercase tracking-widest">
+                Succession Swap Executed
+              </span>
+              <span className="font-sans text-[10px] text-[#d0c5b2] tracking-wide">
+                WETH has been successfully swapped to USDC on Uniswap V3.
+              </span>
+            </div>
+          </div>
+          <a
+            href={`${process.env.NEXT_PUBLIC_ETHERSCAN_BASE}${uniswapTxHash}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-mono text-[11px] text-blue-400 hover:text-blue-300 underline underline-offset-4 tracking-wider"
+          >
+            View on Sepolia Etherscan
+          </a>
+        </div>
+      )}
 
       {/* AXL Mesh Visualiser */}
       <div className="bg-[#1b1c1c] border border-[#c9a84c]/10 rounded-sm overflow-hidden relative">

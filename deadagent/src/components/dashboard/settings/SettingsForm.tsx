@@ -11,6 +11,8 @@ import { firestoreWriteWithRetry } from '@/lib/firebase/retryWrite';
 import { useWalletStore } from '@/lib/store/useWalletStore';
 import { useToast } from '@/components/ui/ToastProvider';
 import { settingsSchema, DEFAULT_SETTINGS, type SettingsFormData } from './schema';
+import { useEns } from '@/hooks/useEns';
+import { useKeeper } from '@/hooks/useKeeper';
 
 // ── Reusable UI pieces ─────────────────────────────────────
 function SectionDivider({ title, subtitle }: { title: string; subtitle?: string }) {
@@ -87,6 +89,8 @@ export function SettingsForm() {
   const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'saved'>('idle');
   const [revokeOpen, setRevokeOpen] = useState(false);
   const [destroyOpen, setDestroyOpen] = useState(false);
+  const { registerSubname, isRegistering, txHash: ensTxHash } = useEns();
+  const { registerHeartbeatJob, isRegisteringJob, txHash: keeperTxHash } = useKeeper();
 
   const {
     register,
@@ -143,6 +147,29 @@ export function SettingsForm() {
   // ── Heartbeat slider state ───────────────────────────────
   const heartbeatDays = useWatch({ control, name: 'heartbeatDays' });
 
+  // ── ENS Registration Handler ─────────────────────────────
+  const handleRegisterEns = async () => {
+    const name = watchedValues.displayName || '';
+    const subname = name.replace('.deadagent.eth', '').toLowerCase();
+    if (!subname) {
+      toast('Please enter a valid subname', 'error');
+      return;
+    }
+    const hash = await registerSubname(subname);
+    if (hash) {
+      toast('ENS Subname registered on Sepolia!', 'success');
+    }
+  };
+
+  // ── Keeper Registration Handler ──────────────────────────
+  const handleRegisterKeeper = async () => {
+    const days = watchedValues.heartbeatDays || 7;
+    const hash = await registerHeartbeatJob(days);
+    if (hash) {
+      toast('Keeper heartbeat job registered on Sepolia!', 'success');
+    }
+  };
+
   // ── Danger zone handlers ─────────────────────────────────
   const handleRevokeAll = () => {
     console.log('🚨 Revoked all agents for', uid);
@@ -185,12 +212,37 @@ export function SettingsForm() {
               <label className="font-sans text-[10px] text-[#d0c5b2] uppercase tracking-wider block mb-1.5">
                 Display Name
               </label>
-              <input
-                {...register('displayName')}
-                className="w-full bg-[#0A0A0B] border border-[#c9a84c]/20 rounded-sm px-4 py-2.5 text-[12px] text-[#e4e2e1] placeholder-[#c9a84c]/30 focus:outline-none focus:border-[#c9a84c]/60 font-mono transition-colors"
-                placeholder="vault.deadagent.eth"
-              />
-              <FieldError message={errors.displayName?.message} />
+              <div className="flex gap-2">
+                <div className="flex-1">
+                  <input
+                    {...register('displayName')}
+                    className="w-full bg-[#0A0A0B] border border-[#c9a84c]/20 rounded-sm px-4 py-2.5 text-[12px] text-[#e4e2e1] placeholder-[#c9a84c]/30 focus:outline-none focus:border-[#c9a84c]/60 font-mono transition-colors"
+                    placeholder="vault.deadagent.eth"
+                  />
+                  <FieldError message={errors.displayName?.message} />
+                </div>
+                <button
+                  type="button"
+                  onClick={handleRegisterEns}
+                  disabled={isRegistering}
+                  className="px-4 py-2 bg-[#1b1c1c] border border-[#c9a84c]/20 text-[#c9a84c] rounded-sm text-[10px] uppercase tracking-wider hover:bg-[#c9a84c]/10 transition-colors disabled:opacity-50"
+                >
+                  {isRegistering ? 'Registering...' : 'Register'}
+                </button>
+              </div>
+              {ensTxHash && (
+                <div className="mt-2 p-2 bg-[#1b1c1c] border border-[#c9a84c]/20 rounded-sm">
+                  <p className="text-[9px] text-[#c9a84c] uppercase tracking-wider">Sepolia TX Hash:</p>
+                  <a 
+                    href={`${process.env.NEXT_PUBLIC_ETHERSCAN_BASE}${ensTxHash}`}
+                    target="_blank"
+                    rel="noopener noreferrer" 
+                    className="text-[10px] text-blue-400 hover:underline font-mono truncate block"
+                  >
+                    {ensTxHash}
+                  </a>
+                </div>
+              )}
             </div>
             <div>
               <label className="font-sans text-[10px] text-[#d0c5b2] uppercase tracking-wider block mb-1.5">
@@ -265,6 +317,29 @@ export function SettingsForm() {
             <span>15 days</span>
             <span>30 days</span>
           </div>
+          
+          <button
+            type="button"
+            onClick={handleRegisterKeeper}
+            disabled={isRegisteringJob}
+            className="mt-2 w-full py-3 bg-[#1b1c1c] border border-[#c9a84c]/20 text-[#c9a84c] rounded-sm text-[10px] uppercase tracking-wider hover:bg-[#c9a84c]/10 transition-colors disabled:opacity-50"
+          >
+            {isRegisteringJob ? 'Registering Job...' : 'Update On-Chain Keeper'}
+          </button>
+          
+          {keeperTxHash && (
+            <div className="mt-2 p-3 bg-[#1b1c1c] border border-[#c9a84c]/20 rounded-sm">
+              <p className="text-[9px] text-[#c9a84c] uppercase tracking-wider mb-1">KeeperHub TX Hash:</p>
+              <a 
+                href={`${process.env.NEXT_PUBLIC_ETHERSCAN_BASE}${keeperTxHash}`}
+                target="_blank"
+                rel="noopener noreferrer" 
+                className="text-[10px] text-blue-400 hover:underline font-mono truncate block"
+              >
+                {keeperTxHash}
+              </a>
+            </div>
+          )}
         </div>
       </section>
 

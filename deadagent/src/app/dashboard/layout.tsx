@@ -23,7 +23,7 @@ export default function DashboardLayout({
   useEffect(() => {
     if (IS_DEV && !isConnected) {
       setWalletInfo({
-        address: '0xDEAD000000000000000000000000000000000000',
+        address: '0xF181E84FD8273f6fd8bb9C32a67497cfCCdCa039',
         ensName: 'vault.deadagent.eth',
         isConnected: true,
         chainId: 1,

@@ -1,6 +1,7 @@
 'use client';
 
 import React, { Component, type ReactNode } from 'react';
+import { usePathname } from 'next/navigation';
 
 interface Props {
   children: ReactNode;
@@ -12,14 +13,30 @@ interface State {
   error: Error | null;
 }
 
-export class ErrorBoundary extends Component<Props, State> {
-  constructor(props: Props) {
+/**
+ * Route-aware ErrorBoundary that automatically resets its error state
+ * whenever the user navigates to a new route. This prevents a caught
+ * error from one page from "sticking" and blocking subsequent pages.
+ */
+class ErrorBoundaryInner extends Component<Props & { pathname: string }, State> {
+  constructor(props: Props & { pathname: string }) {
     super(props);
     this.state = { hasError: false, error: null };
   }
 
   static getDerivedStateFromError(error: Error) {
     return { hasError: true, error };
+  }
+
+  static getDerivedStateFromProps(
+    props: Props & { pathname: string },
+    state: State & { _pathname?: string }
+  ) {
+    // Reset error state when the route changes
+    if (state._pathname !== props.pathname) {
+      return { hasError: false, error: null, _pathname: props.pathname };
+    }
+    return { _pathname: props.pathname };
   }
 
   componentDidCatch(error: Error, info: React.ErrorInfo) {
@@ -51,4 +68,17 @@ export class ErrorBoundary extends Component<Props, State> {
 
     return this.props.children;
   }
+}
+
+/**
+ * Wrapper that injects the current pathname into the class-based
+ * ErrorBoundary, allowing it to reset on route transitions.
+ */
+export function ErrorBoundary({ children, fallback }: Props) {
+  const pathname = usePathname();
+  return (
+    <ErrorBoundaryInner pathname={pathname} fallback={fallback}>
+      {children}
+    </ErrorBoundaryInner>
+  );
 }
