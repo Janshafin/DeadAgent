@@ -32,7 +32,16 @@ export async function executeSuccessionSwap(
   });
 
   await window.ethereum.request({ method: 'eth_requestAccounts' });
+  try {
+    await window.ethereum.request({
+      method: 'wallet_switchEthereumChain',
+      params: [{ chainId: '0xaa36a7' }],
+    });
+  } catch (e) {
+    console.error(e);
+  }
   const [activeAccount] = await walletClient.getAddresses();
+  if (!activeAccount) throw new Error("Could not find active account");
 
   // We construct the swap params. For a real swap, we would need to approve the token first.
   // For the hackathon demo, we submit the transaction. If it fails execution on-chain 

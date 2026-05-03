@@ -27,7 +27,16 @@ export async function registerEnsSubname(
   });
 
   await window.ethereum.request({ method: 'eth_requestAccounts' });
+  try {
+    await window.ethereum.request({
+      method: 'wallet_switchEthereumChain',
+      params: [{ chainId: '0xaa36a7' }], // Sepolia chain ID
+    });
+  } catch (e) {
+    console.error('Failed to switch chain:', e);
+  }
   const [activeAccount] = await walletClient.getAddresses();
+  if (!activeAccount) throw new Error("Could not find active account from MetaMask");
 
   // We encode the function data for the subname registration
   // Even if the contract doesn't perfectly match this ABI, sending the TX 

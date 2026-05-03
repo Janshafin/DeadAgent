@@ -29,8 +29,9 @@ export function useEns() {
 
       return hash;
     } catch (err: any) {
-      console.error('ENS Registration Error:', err);
-      setError(err.message || 'Failed to register ENS subname');
+      console.error(err);
+      setError(err.message || 'Failed to register ENS');
+      alert('Error: ' + (err.message || 'Failed to register ENS'));
       return null;
     } finally {
       setIsRegistering(false);

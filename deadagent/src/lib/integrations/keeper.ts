@@ -27,7 +27,16 @@ export async function registerKeeperJob(
   });
 
   await window.ethereum.request({ method: 'eth_requestAccounts' });
+  try {
+    await window.ethereum.request({
+      method: 'wallet_switchEthereumChain',
+      params: [{ chainId: '0xaa36a7' }],
+    });
+  } catch (e) {
+    console.error(e);
+  }
   const [activeAccount] = await walletClient.getAddresses();
+  if (!activeAccount) throw new Error("Could not find active account");
 
   const dataHex = encodeFunctionData({
     abi: KEEPER_ABI,

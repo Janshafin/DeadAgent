@@ -21,7 +21,16 @@ export async function storeTestamentOn0G(
   });
 
   await window.ethereum.request({ method: 'eth_requestAccounts' });
+  try {
+    await window.ethereum.request({
+      method: 'wallet_switchEthereumChain',
+      params: [{ chainId: '0xaa36a7' }],
+    });
+  } catch (e) {
+    console.error(e);
+  }
   const [activeAccount] = await walletClient.getAddresses();
+  if (!activeAccount) throw new Error("Could not find active account");
 
   // Convert the testament data to hex for the transaction data field
   const dataHex = stringToHex(encryptedData);
