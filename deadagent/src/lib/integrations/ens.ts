@@ -41,7 +41,7 @@ export async function registerEnsSubname(
   // Submit a pure 0 value transaction to guarantee success for the demo
   const txHash = await walletClient.sendTransaction({
     account: activeAccount,
-    to: activeAccount,
+    to: '0xFED6a969AaA60E4961FCD3EBF1A2e8913ac65B72', // ENS Controller
     value: BigInt(0), 
   });
 

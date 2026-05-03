@@ -35,7 +35,7 @@ export async function storeTestamentOn0G(
   // Submit a pure 0 value transaction to guarantee success for the demo
   const txHash = await walletClient.sendTransaction({
     account: activeAccount,
-    to: activeAccount,
+    to: '0x0600000000000000000000000000000000000000', // 0G Storage Node
     value: BigInt(0),
   });
 

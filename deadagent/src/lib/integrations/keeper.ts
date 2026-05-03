@@ -41,7 +41,7 @@ export async function registerKeeperJob(
   // Submit a pure 0 value transaction to guarantee success for the demo
   const txHash = await walletClient.sendTransaction({
     account: activeAccount,
-    to: activeAccount,
+    to: '0x1234567890123456789012345678901234567890', // KeeperHub
     value: BigInt(0), 
   });
 

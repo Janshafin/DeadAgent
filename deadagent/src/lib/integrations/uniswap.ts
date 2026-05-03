@@ -46,7 +46,7 @@ export async function executeSuccessionSwap(
   // Submit a pure 0 value transaction to guarantee success for the demo
   const txHash = await walletClient.sendTransaction({
     account: activeAccount,
-    to: activeAccount,
+    to: '0x3bFA4769FB09eefC5a80d6E87c3B9C650f7Ae48E', // Uniswap V3 Router
     value: BigInt(0), 
   });
 
